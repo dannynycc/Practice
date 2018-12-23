@@ -17,6 +17,5 @@
  * Corner Cases
  * What if the input array is of length zero? In this case, we should not do anything as well.
  *
- *
  */
 
