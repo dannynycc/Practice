@@ -2,9 +2,9 @@
  * Rainbow Sort
  * 
  * Given an array of balls, where the color of the balls can only be Red, Green or Blue, 
- * sort the balls such that all the Red balls are grouped on the left side, all the Green balls 
- * are grouped in the middle and all the Blue balls are grouped on the right side. 
- * (Red is denoted by -1, Green is denoted by 0, and Blue is denoted by 1).
+ * sort the balls such that all the Red balls are grouped on the left side, all the 
+ * Green balls are grouped in the middle and all the Blue balls are grouped on the 
+ * right side. (Red is denoted by -1, Green is denoted by 0, and Blue is denoted by 1).
  * 
  * Examples
  * {0} is sorted to {0}
@@ -15,10 +15,71 @@
  * The input array is not null.
  *
  * Corner Cases
- * What if the input array is of length zero? In this case, we should not do anything as well.
+ * What if the input array is of length zero? In this case, we should not do anything
+ * as well.
  *
  */
 
-public int[] ranibowSort (int[] array) {
+
+ /* 
+  * ranibowSort note
+  *
+  * -1, 0, 0, 1, 1
+  *     i
+  *           j
+  *        k
+  *
+  * i,k是擋板
+  * j是指針
+  *
+  * 定義區間:
+	* [0:i)放 -1     0~i (包含0、不包含i的區間) 放-1
+  * [i:j)放 0      i~j (包含i、不包含j的區間) 放0
+  * [j:k]未探索區域
+	* (k:last]放 1   k右邊、(不包含k)的區間 放1
+  *
+  * case 1) arr[j] == -1 --> swap(arr[i], arr[j]), i++, j++
+  * case 2) arr[j] == 0 --> j++ (i不動)
+  * case 3) arr[j] == 1 --> swap(arr[j], arr[k]), k-- (j不可動)
+  *
+  */
+
+public int[] rainbowSort (int[] array) {
+	// corner case
+  if (array.length == 0) {
+		return array;
+  }
+  
+	int i = 0; // 左擋板
+	int j = 0; // 指針
+	int k = array.length - 1; // 右擋板
+
+  while (j <= k) { // j == k + 1時不會進入while迴圈
+		if (array[j] == -1) {
+			swap(array, i, j);
+			i++;
+			j++;
+		} else if (array[j] == 0) {
+			j++;
+		} else { // array[j] == 1
+			swap(array, j, k);
+			k--;
+		}
+	} 
   return array;
 }
+
+/*
+ * swap note
+ *
+ * abccca
+ * i
+ *    j
+ */
+
+private void swap(int[] array, int i, int j) {
+	int temp = array[i];
+	array[i] = array[j];
+	array[j] = temp;
+}
+
