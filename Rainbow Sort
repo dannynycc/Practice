@@ -19,3 +19,6 @@
  *
  */
 
+public int[] ranibowSort (int[] array) {
+  return array;
+}
