@@ -31,13 +31,35 @@ public class Solution {
 	public ListNode reorder(ListNode head) {
 		
 		// Partition list into two halfs
-		ListNode middle = findMiddle(ListNode head);
+		ListNode middle = findMiddle(head);
 		ListNode secondHalfHead = middle.next;
 		middle.next = null;
 
 		// Reverse second half list
-		ListNode reversedHead = reverseLinkedList(ListNode secondHalfHead);
-		
+		ListNode reversedHead = reverseLinkedList(secondHalfHead);
+
+		// 一邊取一個
+		// head: 1->2->3->null
+		//		          i 
+		//		          iN		
+		// reversedHead: 6->5->4->null
+		//						          j 
+		//					            jN
+		ListNode i = head;
+		ListNode iNext = head;
+		ListNode j = reversedHead;
+		ListNode jNext = reversedHead;
+		ListNode dummyHead = new ListNode(0);
+		dummyHead.next = i;
+		while (i != null && j!= null) {
+			iNext = i.next;
+			jNext = j.next;
+			i.next = j;
+			i = iNext;
+			j.next = iNext;
+			j = jNext;
+		}
+		return dummyHead.next;
 	}
 	
 	private ListNode findMiddle(ListNode head) {
