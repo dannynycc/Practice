@@ -30,7 +30,40 @@
 public class Solution {
 	public ListNode reorder(ListNode head) {
 		
+		// Partition list into two halfs
+		ListNode middle = findMiddle(ListNode head);
+		ListNode secondHalfHead = middle.next;
+		middle.next = null;
+
+		// Reverse second half list
+		ListNode reversedHead = reverseLinkedList(ListNode secondHalfHead);
+		
 	}
+	
+	private ListNode findMiddle(ListNode head) {
+		ListNode slow = head;
+		ListNode fast = head;
+		while (fast.next != null || fast.next.next != null) {
+			slow = slow.next;
+			fast = fast.next.next;
+		}
+    // 此時slow為中點
+		return slow;
+	}
+
+	private ListNode reverseLinkedList(ListNode head) {
+		ListNode curr = head;
+		ListNode next = head;
+		ListNode prev = null;
+		while (curr != null) {
+			next = curr.next;
+			curr.next = prev;
+			prev = curr;
+			curr = next;
+		}
+		return prev;
+	}
+
 }
 
 
