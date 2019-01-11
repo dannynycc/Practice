@@ -1,5 +1,6 @@
 /*
  * Bipartite v1.1 可以支持 all connected graph 了 (i.e. 沒連著的可以判斷了，所有node都會被遍歷到)
+ * 算法: 理論課教案存檔p67
  * 
  * Determine if an undirected graph is bipartite. A bipartite graph is one in which the
  * nodes can be divided into two groups such that no nodes have direct edges to other
