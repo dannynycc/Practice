@@ -1,5 +1,5 @@
 /*
- * Bipartite v1.0 只能支持 all connected graph (i.e. 沒連著的沒辦法判斷，graph7會return錯誤的值)
+ * Bipartite v1.1 可以支持 all connected graph 了 (i.e. 沒連著的可以判斷了，所有node都會被遍歷到)
  * 
  * Determine if an undirected graph is bipartite. A bipartite graph is one in which the
  * nodes can be divided into two groups such that no nodes have direct edges to other
@@ -47,39 +47,45 @@ class GraphNode {
 
 public class Solution {
   public boolean isBipartite(List<GraphNode> graph) {
-
-    HashSet<GraphNode> s = new HashSet<>();
-    Queue<GraphNode> q = new LinkedList<>();
     
-    // Initialize
-    GraphNode firstNode = graph.get(0);
-    firstNode.color = 1;
-    q.offer(firstNode);
-    
-    while (q.size() != 0) {
-      GraphNode cur = q.poll();
-      s.add(cur); // 加到set裡面
-      for (GraphNode nei : cur.neighbors) {
-        if (s.contains(nei)) { // case 1: this neighbor has been generated before
-          if (nei.color == cur.color) { // case 1.2
-            return false;
-          }
-        } else { // this neighbor has NOT been generated before => assign opposite color then enqueue it. 
-            if (cur.color == 1) {
-              nei.color = 2;
-            } else if (cur.color == 2) {
-              nei.color = 1;
+    for (GraphNode start : graph) {
+      if (start.color == 0) {
+        HashSet<GraphNode> s = new HashSet<>();
+        Queue<GraphNode> q = new LinkedList<>();
+        
+        // Initialize
+        start.color = 1;
+        q.offer(start);
+        
+        while (q.size() != 0) {
+          GraphNode cur = q.poll();
+          // System.out.println(cur.key);
+          s.add(cur); // 加到set裡面
+          for (GraphNode nei : cur.neighbors) {
+            if (s.contains(nei)) { // case 1: this neighbor has been generated before
+              if (nei.color == cur.color) { // case 1.2
+                return false;
+              }
+            } else { // this neighbor has NOT been generated before => assign opposite color then enqueue it. 
+                if (cur.color == 1) {
+                  nei.color = 2;
+                } else if (cur.color == 2) {
+                  nei.color = 1;
+                }
+                q.offer(nei);
             }
-            q.offer(nei);
+          }
         }
       }
     }
+    
+    
     return true;
   }
   
   public static void main(String[] args) {
     Solution sol = new Solution();
-    
+ 
     // 調用 graph1 這個 testcase，應打印false
     List<GraphNode> graph1 = sol.graph1();
     // 調用 isBipartite() 這個 function
@@ -111,7 +117,7 @@ public class Solution {
     boolean result6 = sol.isBipartite(graph6);
     System.out.println(result6);
 
-    // 調用 graph7 這個 testcase，正確答案為false，但是會打印true
+    // 調用 graph7 這個 testcase，應打印false
     List<GraphNode> graph7 = sol.graph7();
     boolean result7 = sol.isBipartite(graph7);
     System.out.println(result7);
@@ -354,5 +360,4 @@ public class Solution {
     return g;
   }
 }
-
 
