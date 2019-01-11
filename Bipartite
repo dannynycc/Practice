@@ -1,0 +1,323 @@
+/*
+ * Bipartite v1.0 只能支持 all connected graph (i.e. 沒連著的沒版法判斷)
+ * 
+ * Determine if an undirected graph is bipartite. A bipartite graph is one in which the
+ * nodes can be divided into two groups such that no nodes have direct edges to other
+ * nodes in the same group.
+ * 
+ * Example:
+ *
+ *  1 -- 2
+ *      /
+ *     /
+ *    /
+ *   / 
+ *  3 -- 4  
+ *   
+ * is bipartite (1, 3 in group 1 and 2, 4 in group 2). 
+ * 
+ *
+ *  1 -- 2
+ *      /|
+ *     / |
+ *    /  |
+ *   /   |
+ *  3 -- 4  
+ *  
+ * is not bipartite.
+ * 
+ * Assumptions:
+ * The graph is represented by a list of nodes, and the list of nodes is not null.
+ * 
+ */
+
+package isBipartite;
+import java.util.*;
+
+class GraphNode {
+  public int key;
+  public int color; // idea 分成 color1 和 color2
+  public List<GraphNode> neighbors;
+  public GraphNode(int key) {
+    this.key = key;
+    this.color = 0; // default 0: 代表還沒訪問過
+    this.neighbors = new ArrayList<>();
+  }
+}
+
+public class Solution {
+  public boolean isBipartite(List<GraphNode> graph) {
+
+    HashSet<GraphNode> s = new HashSet<>();
+    Queue<GraphNode> q = new LinkedList<>();
+    
+    // Initialize
+    GraphNode firstNode = graph.get(0);
+    firstNode.color = 1;
+    q.offer(firstNode);
+    
+    while (q.size() != 0) {
+      GraphNode cur = q.poll();
+      s.add(cur); // 加到set裡面
+      for (GraphNode nei : cur.neighbors) {
+        if (s.contains(nei)) { // case 1: this neighbor has been generated before
+          if (nei.color == cur.color) { // case 1.2
+            return false;
+          }
+        } else { // this neighbor has NOT been generated before => assign opposite color then enqueue it. 
+            if (cur.color == 1) {
+              nei.color = 2;
+            } else if (cur.color == 2) {
+              nei.color = 1;
+            }
+            q.offer(nei);
+        }
+      }
+    }
+    return true;
+  }
+  
+  public static void main(String[] args) {
+    Solution sol = new Solution();
+    
+    // 調用 graph1 這個 testcase，應打印false
+    List<GraphNode> graph1 = sol.graph1();
+    // 調用 isBipartite() 這個 function
+    boolean result1 = sol.isBipartite(graph1);
+    System.out.println(result1);
+    
+    // 調用 graph2 這個 testcase，應打印true
+    List<GraphNode> graph2 = sol.graph2();
+    boolean result2 = sol.isBipartite(graph2);
+    System.out.println(result2);
+    
+    // 調用 graph3 這個 testcase，應打印true
+    List<GraphNode> graph3 = sol.graph3();
+    boolean result3 = sol.isBipartite(graph3);
+    System.out.println(result3);
+    
+    // 調用 graph4 這個 testcase，應打印false
+    List<GraphNode> graph4 = sol.graph4();
+    boolean result4 = sol.isBipartite(graph4);
+    System.out.println(result4);
+    
+    // 調用 graph5 這個 testcase，應打印true
+    List<GraphNode> graph5 = sol.graph5();
+    boolean result5 = sol.isBipartite(graph5);
+    System.out.println(result5);
+    
+    // 調用 graph6 這個 testcase，應打印false
+    List<GraphNode> graph6 = sol.graph6();
+    boolean result6 = sol.isBipartite(graph6);
+    System.out.println(result6);
+    
+  }
+  
+  private List<GraphNode> graph1() {
+    // 手動建一個graph，名稱叫做g，此例isBipartite = false
+    //   1 -- 2 
+    //   |    | \
+    //   |    |  4
+    //   |    | /
+    //   3 -- 5 
+    GraphNode n1 = new GraphNode(1);
+    GraphNode n2 = new GraphNode(2);
+    GraphNode n3 = new GraphNode(3);
+    GraphNode n4 = new GraphNode(4);
+    GraphNode n5 = new GraphNode(5);
+    n1.neighbors.add(n2);
+    n1.neighbors.add(n3);
+    n2.neighbors.add(n1);
+    n2.neighbors.add(n4);
+    n2.neighbors.add(n5);
+    n3.neighbors.add(n1);
+    n3.neighbors.add(n5);
+    n4.neighbors.add(n2);
+    n4.neighbors.add(n5);
+    n5.neighbors.add(n2);
+    n5.neighbors.add(n3);
+    n5.neighbors.add(n4);
+    List<GraphNode> g = new ArrayList<>();
+    g.add(n1);
+    g.add(n2);
+    g.add(n3);
+    g.add(n4);
+    g.add(n5);
+    return g;
+  }
+  
+  private List<GraphNode> graph2() {
+    // 手動建一個graph，名稱叫做g，此例isBipartite = true
+    //   1 -- 2 
+    //   |    | \
+    //   |    |  4
+    //   |    | 
+    //   3 -- 5 
+    GraphNode n1 = new GraphNode(1);
+    GraphNode n2 = new GraphNode(2);
+    GraphNode n3 = new GraphNode(3);
+    GraphNode n4 = new GraphNode(4);
+    GraphNode n5 = new GraphNode(5);
+    n1.neighbors.add(n2);
+    n1.neighbors.add(n3);
+    n2.neighbors.add(n1);
+    n2.neighbors.add(n4);
+    n2.neighbors.add(n5);
+    n3.neighbors.add(n1);
+    n3.neighbors.add(n5);
+    n4.neighbors.add(n2);
+    n5.neighbors.add(n2);
+    n5.neighbors.add(n3);
+    List<GraphNode> g = new ArrayList<>();
+    g.add(n1);
+    g.add(n2);
+    g.add(n3);
+    g.add(n4);
+    g.add(n5);
+    return g;
+  }
+  
+  private List<GraphNode> graph3() {
+    // 手動建一個graph，名稱叫做g，此例isBipartite = true
+    //  1 -- 2
+    //      /
+    //     /
+    //    /
+    //   / 
+    //  3 -- 4 
+    GraphNode n1 = new GraphNode(1);
+    GraphNode n2 = new GraphNode(2);
+    GraphNode n3 = new GraphNode(3);
+    GraphNode n4 = new GraphNode(4);
+    n1.neighbors.add(n2);
+    n2.neighbors.add(n1);
+    n2.neighbors.add(n3);
+    n3.neighbors.add(n2);
+    n3.neighbors.add(n4);
+    n4.neighbors.add(n3);
+    List<GraphNode> g = new ArrayList<>();
+    g.add(n1);
+    g.add(n2);
+    g.add(n3);
+    g.add(n4);
+    return g;
+  }
+  
+  private List<GraphNode> graph4() {
+    // 手動建一個graph，名稱叫做g，此例isBipartite = false
+    //  1 -- 2
+    //      /|
+    //     / |
+    //    /  |
+    //   /   | 
+    //  3 -- 4 
+    GraphNode n1 = new GraphNode(1);
+    GraphNode n2 = new GraphNode(2);
+    GraphNode n3 = new GraphNode(3);
+    GraphNode n4 = new GraphNode(4);
+    n1.neighbors.add(n2);
+    n2.neighbors.add(n1);
+    n2.neighbors.add(n3);
+    n2.neighbors.add(n4);
+    n3.neighbors.add(n2);
+    n3.neighbors.add(n4);
+    n4.neighbors.add(n2);
+    n4.neighbors.add(n3);
+    List<GraphNode> g = new ArrayList<>();
+    g.add(n1);
+    g.add(n2);
+    g.add(n3);
+    g.add(n4);
+    return g;
+  }
+  
+  private List<GraphNode> graph5() {
+    // 手動建一個graph，名稱叫做g，此例isBipartite = true
+    //  1 -- 2
+    //   \  /
+    //    \/ 
+    //    /\ 
+    //   /  \ 
+    //  3 -- 4 
+    //   \  /
+    //    \/ 
+    //    /\ 
+    //   /  \ 
+    //  5 -- 6 
+    GraphNode n1 = new GraphNode(1);
+    GraphNode n2 = new GraphNode(2);
+    GraphNode n3 = new GraphNode(3);
+    GraphNode n4 = new GraphNode(4);
+    GraphNode n5 = new GraphNode(5);
+    GraphNode n6 = new GraphNode(6);
+    n1.neighbors.add(n2);
+    n1.neighbors.add(n4);
+    n2.neighbors.add(n1);
+    n2.neighbors.add(n3);
+    n3.neighbors.add(n2);
+    n3.neighbors.add(n4);
+    n3.neighbors.add(n6);
+    n4.neighbors.add(n1);
+    n4.neighbors.add(n3);
+    n4.neighbors.add(n5);
+    n5.neighbors.add(n4);
+    n5.neighbors.add(n6);
+    n6.neighbors.add(n3);
+    n6.neighbors.add(n5);
+    List<GraphNode> g = new ArrayList<>();
+    g.add(n1);
+    g.add(n2);
+    g.add(n3);
+    g.add(n4);
+    g.add(n5);
+    g.add(n6);
+    return g;
+  }
+  
+  private List<GraphNode> graph6() {
+    // 手動建一個graph，名稱叫做g，此例isBipartite = false
+    //  1 -- 2
+    //   \  /
+    //    \/ 
+    //    /\ 
+    //   /  \ 
+    //  3 -- 4 
+    //   \  /|
+    //    \/ |
+    //    /\ |
+    //   /  \|
+    //  5 -- 6 
+    GraphNode n1 = new GraphNode(1);
+    GraphNode n2 = new GraphNode(2);
+    GraphNode n3 = new GraphNode(3);
+    GraphNode n4 = new GraphNode(4);
+    GraphNode n5 = new GraphNode(5);
+    GraphNode n6 = new GraphNode(6);
+    n1.neighbors.add(n2);
+    n1.neighbors.add(n4);
+    n2.neighbors.add(n1);
+    n2.neighbors.add(n3);
+    n3.neighbors.add(n2);
+    n3.neighbors.add(n4);
+    n3.neighbors.add(n6);
+    n4.neighbors.add(n1);
+    n4.neighbors.add(n3);
+    n4.neighbors.add(n5);
+    n4.neighbors.add(n6);
+    n5.neighbors.add(n4);
+    n5.neighbors.add(n6);
+    n6.neighbors.add(n3);
+    n4.neighbors.add(n4);
+    n6.neighbors.add(n5);
+    List<GraphNode> g = new ArrayList<>();
+    g.add(n1);
+    g.add(n2);
+    g.add(n3);
+    g.add(n4);
+    g.add(n5);
+    g.add(n6);
+    return g;
+  }
+}
+
+
