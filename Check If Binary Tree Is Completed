@@ -1,0 +1,108 @@
+/*
+ * Check If Binary Tree Is Completed
+ * 
+ * Check if a given binary tree is completed. A complete binary tree is one in which 
+ * every level of the binary tree is completely filled except possibly the last level. 
+ * Furthermore, all nodes are as far left as possible.
+ * 
+ * Example:
+ *
+ *        5
+ *       / \
+ *      3   8
+ *     / \ 
+ *    1   4
+ *  
+ * is completed.
+ *
+ *        5
+ *       / \
+ *      3   8
+ *     / \   \
+ *    1   4   11
+ *  
+ * is not completed.
+ * 
+ * Corner Cases:
+ * What if the binary tree is null? Return true in this case.
+ * 
+ */
+
+public class TreeNode {
+  public int key;
+  public TreeNode left;
+  public TreeNode right;
+  public TreeNode(int key) {
+    this.key = key;
+  }
+}
+
+public class Solution {
+  public boolean isCompleted(TreeNode root) {
+    // corner case
+		if (root == null) {
+			return true;
+		}
+		
+		Queue<TreeNode> q = new LinkedList<>();
+		q.offer(root);
+		boolean metNull = false;
+
+		while (q.size() != 0) {
+			TreeNode cur = q.poll();
+			
+			// violation check #1
+			if (cur.left == null && cur.right != null) {
+				return false;
+			}
+			
+			// violation check #2
+			if (metNull && (cur.left != null || cur.right != null)) {
+				return false;
+			}
+			
+			// when do we flip metNull?
+			if (cur.left == null || cur.right == null) {
+				metNull = true;
+			}
+
+			// 正常的offer: 將兒子們放進q裡面
+			if (cur.left != null) {
+				q.offer(cur.left);
+			}
+			if (cur.right != null) {
+				q.offer(cur.right);
+			}
+		}
+		// 如果能夠出while loop，代表沒有遇到violation，就可以確認是balanced binary tree
+    // 可以安心返回true
+		return true;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
