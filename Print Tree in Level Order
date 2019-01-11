@@ -1,0 +1,78 @@
+/*
+ * Print Tree in Level Order
+ * 
+ * Print all node values in a tree in level order.
+ * Assumption: The tree is not null or empty.
+ *
+ * Example:
+ *
+ *        7
+ *       / \
+ *      5   4
+ *     / \
+ *    3   6
+ *       /
+ *      1
+ *  
+ * Answer:
+ * [7,5,4,3,6,1]
+ * 
+ */
+
+public class TreeNode {
+  public int key;
+  public TreeNode left;
+  public TreeNode right;
+  public TreeNode(int key) {
+    this.key = key;
+  }
+}
+
+public class Solution {
+  public List<Integer> bfs(TreeNode root) {
+		Queue<TreeNode> q = new LinkedList<>();
+		q.offer(root);
+		
+		// 存答案用的Integer ArrayList
+		List<Integer> l = new ArrayList<>();
+		
+		while (!q.isEmpty()) {
+			TreeNode cur = q.poll();
+			l.add(cur.key);
+			if (cur.left != null) {
+				q.offer(cur.left);
+			}
+			if (cur.right != null) {
+				q.offer(cur.right);
+			}
+		}
+		return l;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
