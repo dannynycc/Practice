@@ -1,5 +1,5 @@
 /*
- * Bipartite v1.0 只能支持 all connected graph (i.e. 沒連著的沒版法判斷)
+ * Bipartite v1.0 只能支持 all connected graph (i.e. 沒連著的沒辦法判斷，graph7會return錯誤的值)
  * 
  * Determine if an undirected graph is bipartite. A bipartite graph is one in which the
  * nodes can be divided into two groups such that no nodes have direct edges to other
@@ -110,6 +110,11 @@ public class Solution {
     List<GraphNode> graph6 = sol.graph6();
     boolean result6 = sol.isBipartite(graph6);
     System.out.println(result6);
+
+    // 調用 graph7 這個 testcase，正確答案為false，但是會打印true
+    List<GraphNode> graph7 = sol.graph7();
+    boolean result7 = sol.isBipartite(graph7);
+    System.out.println(result7);
     
   }
   
@@ -316,6 +321,36 @@ public class Solution {
     g.add(n4);
     g.add(n5);
     g.add(n6);
+    return g;
+  }
+
+  private List<GraphNode> graph7() {
+    // 手動建一個graph，名稱叫做g，此例isBipartite = false
+    //   1 --- 2 
+    //
+    //   3 --- 4
+    //    \   /
+    //     \ /
+    //      5
+    GraphNode n1 = new GraphNode(1);
+    GraphNode n2 = new GraphNode(2);
+    GraphNode n3 = new GraphNode(3);
+    GraphNode n4 = new GraphNode(4);
+    GraphNode n5 = new GraphNode(5);
+    n1.neighbors.add(n2);
+    n2.neighbors.add(n1);
+    n3.neighbors.add(n4);
+    n3.neighbors.add(n5);
+    n4.neighbors.add(n3);
+    n4.neighbors.add(n5);
+    n5.neighbors.add(n3);
+    n5.neighbors.add(n4);
+    List<GraphNode> g = new ArrayList<>();
+    g.add(n1);
+    g.add(n2);
+    g.add(n3);
+    g.add(n4);
+    g.add(n5);
     return g;
   }
 }
