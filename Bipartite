@@ -85,7 +85,7 @@ public class Solution {
   
   public static void main(String[] args) {
     Solution sol = new Solution();
- 
+/* 
     // 調用 graph1 這個 testcase，應打印false
     List<GraphNode> graph1 = sol.graph1();
     // 調用 isBipartite() 這個 function
@@ -116,7 +116,7 @@ public class Solution {
     List<GraphNode> graph6 = sol.graph6();
     boolean result6 = sol.isBipartite(graph6);
     System.out.println(result6);
-
+*/
     // 調用 graph7 這個 testcase，應打印false
     List<GraphNode> graph7 = sol.graph7();
     boolean result7 = sol.isBipartite(graph7);
