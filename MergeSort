@@ -1,0 +1,109 @@
+/*
+ * MergeSort
+ * 
+ * Given an array of integers, sort the elements in the array in ascending order.
+ * The merge sort algorithm should be used to solve this problem.
+ *
+ * Examples
+ * {1} is sorted to {1}
+ * {1, 2, 3} is sorted to {1, 2, 3}
+ * {3, 2, 1} is sorted to {1, 2, 3}
+ * {4, 2, -3, 6, 1} is sorted to {-3, 1, 2, 4, 6}
+ *
+ */
+ 
+
+/* 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+
+
+
+public class Solution {
+	public int[] mergeSort(int[] array) {
+		// corner case
+		if (array == null || array.length == 0) {
+			return array;
+		}
+		int[] helper = new int[array.length];
+		partition(array, 0, array.length - 1, helper);
+		return array;
+	}
+
+	private void partition(int[] array, int left, int right, int[] helper) {
+		// base case
+		if (left == right) { // 分到只剩一個元素了
+			return;
+		}
+
+		int mid = left + (right - left) / 2;
+		partition(array, left, mid, helper);
+		partition(array, mid + 1, right, helper);
+		merge(array, left, mid, right, helper);
+	}
+
+	private void merge(int[] array, int left, int mid, int right, int[] helper) {
+		// copy array裡的全部元素到helper裡面
+		for (int i = 0; i < array.length; i++) {
+			helper[i] = array[i];
+		}
+		
+		// 誰小取誰移動誰
+		int l1 = left; // 建立兩個指針l1、l2
+		int l2 = mid + 1;
+		
+		while (l1 <= mid && l2 <= right) {
+			if (helper[l1] <= helper[l2]) {
+				array[left] = helper[l1];
+				left++;
+				l1++;
+			} else {
+				array[left] = helper[l2];
+				left++;
+				l2++;
+			}
+		}
+
+		// post processing: 處理右半區先走完的情況
+		while (l1 <= mid) {
+			array[left] = helper[l1];
+			left++;
+			l1++;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
