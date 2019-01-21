@@ -1,0 +1,48 @@
+    if (curLevelIndex == input.length) {
+      System.out.println(solPrefix);
+      return;
+    }
+    														index = 0      |--> index = 1      |--> index = 2      |--> index = 3
+    solPrefix.append(input[curLevelIndex]);             	sP = {a}	   |    sP = {a,b}     |    sP = {a,b,c}   |    print{a,b,c}
+    findSubset(input, curLevelIndex + 1, solPrefix);        findSubset(1)--|    findSubset(2)--|    findSubset(3)--|    return-|
+    solPrefix.deleteCharAt(solPrefix.length() - 1);							                    	sP = {a,b} <---------------|    
+    																								findSubset(3)-----> index = 3
+    findSubset(input, curLevelIndex + 1, solPrefix);																	print{a,b}
+    																													return-|
+    																			sP = {a} <-------------------------------------|	
+    																			findSubset(2)-----> index = 2      |--> index = 3
+    																								sP = {a,c}     |    print{a,c}
+    																								findSubset(3)--|    return-|
+    																								sP = {a} <-----------------|
+    																								findSubset(3)-----> index = 3
+    																													print{a}
+    																													return-|
+    														sP = {}	<----------------------------------------------------------|
+    														findSubset(1)-----> index = 1      |--> index = 2      |--> index = 3
+    																			sP = {b}       |    sP = {b,c}     |    print{b,c}
+    																			findSubset(2)--|    findSubset(3)--|    return-|
+    																			                    sP = {b} <-----------------|
+    																			                    findSubset(3)-----> index = 3
+    																			                    					print{b}
+    																			                    					return-|
+    																			sP = {} <--------------------------------------|
+    																			findSubset(2)-----> index = 2      |--> index = 3
+    																								sP = {c}       |    print{c}
+    																								findSubset(3)--|    return-|
+    																								sP = {} <-- ---------------|
+    																								findSubset(3)-----> index = 3
+    																													print{}
+    																													return-|
+    														<------------------------------------------------------------------|
+
+
+
+
+
+
+
+
+
+
+
+
