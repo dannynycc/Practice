@@ -1,0 +1,58 @@
+/*
+ * Remove Spaces
+ * 
+ * Given a string, remove all leading/trailing/duplicated 
+ * empty spaces.
+ * 
+ * Assumptions:
+ * The given string is not null.
+ * 
+ * Examples:
+ * "  a" --> "a"
+ * "   I     love MTV " --> “I love MTV”
+ * 
+ */
+
+package removeSpaces;
+
+public class Solution {
+  public static void main(String[] args) {
+    String input = "   I     love MTV ";
+    String result = removeSpaces(input);
+    System.out.println(result);
+  }
+  
+  public static String removeSpaces(String input) {
+    // Write your solution here
+    int fast = 0;
+    int slow = 0;
+    char[] inputArray = input.toCharArray();
+    
+    // 處理一開始就為空白的情況，一直ignore
+    while(inputArray[fast] == ' ') {
+        fast++;
+    }
+    
+    // 現在fast已經走到第一個非空隔鍵的字母了
+    while (fast < inputArray.length) {
+      if (inputArray[fast] != ' ') {
+        inputArray[slow] = inputArray[fast];
+        fast++;
+        slow++;
+      } else if (inputArray[fast] == ' ') {
+        if (inputArray[fast - 1] != ' ') {
+          inputArray[slow] = inputArray[fast];
+          fast++;
+          slow++;
+        } else {
+          fast++;
+        }
+      }
+    }
+    // post processing
+    if (inputArray[slow - 1] == ' ') {
+      slow -= 1;
+    }
+    return new String(inputArray, 0, slow);
+  }
+}
