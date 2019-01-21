@@ -24,34 +24,40 @@ public class Solution {
   
   public static String removeSpaces(String input) {
     // Write your solution here
+    // corner case
+    if (input == "") {
+      return input;
+    }
+
     int fast = 0;
     int slow = 0;
     char[] inputArray = input.toCharArray();
     
     // 處理一開始就為空白的情況，一直ignore
-    while(inputArray[fast] == ' ') {
+    while(fast < inputArray.length) {
+      if (inputArray[fast] == ' ') {
         fast++;
+      } else {
+        break;
+      }
     }
-    
     // 現在fast已經走到第一個非空隔鍵的字母了
     while (fast < inputArray.length) {
       if (inputArray[fast] != ' ') {
-        inputArray[slow] = inputArray[fast];
+        inputArray[slow++] = inputArray[fast++];
+      } else if (inputArray[fast - 1] != ' ') { // 表示inputArray[fast] == ' ' && inputArray[fast - 1] != ' '
+        inputArray[slow++] = inputArray[fast++]; //這種情況也copy
+      } else {
         fast++;
-        slow++;
-      } else if (inputArray[fast] == ' ') {
-        if (inputArray[fast - 1] != ' ') {
-          inputArray[slow] = inputArray[fast];
-          fast++;
-          slow++;
-        } else {
-          fast++;
-        }
       }
     }
-    // post processing
+    // post processing，如果最後一個在slow以前的是空格鍵
+    if (slow == 0) {
+      return "";
+    }
+    // 如果來到這裡，slow 必 > 0
     if (inputArray[slow - 1] == ' ') {
-      slow -= 1;
+      slow -= 1; // 相當於把這個空格鍵抹掉
     }
     return new String(inputArray, 0, slow);
   }
