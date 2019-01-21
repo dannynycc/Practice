@@ -1,0 +1,82 @@
+/*
+ * 給一個類型為int的target value，問這個value是否存在在這棵binary tree裡面
+ * 如果存在 → 打印這個value；如果不存在 → 打印一個null
+ * Signature: private TreeNode searchBST(TreeNode root, int target)
+ * 練習兩種寫法: searchBST1用recursive寫、searchBST2用iterative寫
+ */
+package searchBST;
+
+class TreeNode {
+  int key;
+  TreeNode left;
+  TreeNode right;
+  public TreeNode(int key) {
+    this.key = key;
+  }
+}
+
+public class Solution {
+  public static void main(String[] args) {
+    Solution sol = new Solution();
+    TreeNode root = sol.constructTree();
+    // TreeNode result = sol.searchBST1(root, 9);
+    TreeNode result = sol.searchBST2(root, 10);
+    if (result != null) { // 代表有找到 (i.e. target有在BST裡面)
+      System.out.println(result.key);
+    } else { // 代表沒找到 (i.e. target不在BST裡面)
+      System.out.println("null");
+    }
+  }
+  
+  private TreeNode searchBST1(TreeNode root, int target) {
+    // recursive寫法
+    // base case
+    if (root == null) {
+      return root;
+    }
+    
+    // subproblem & recursive rule
+    if (root.key == target) {
+      return root;
+    } else if (root.key > target) {
+      return searchBST1(root.left, target);
+    } else { // root.key < target
+      return searchBST1(root.right, target);
+    }
+  }
+
+  private TreeNode searchBST2(TreeNode root, int target) {
+    // iterative寫法，較好，因為recursive，iterative省call stack的空間
+    while (root != null) {
+      if (target < root.key) {
+        root = root.left;
+      } else if (target > root.key) {
+        root = root.right;
+      } else {
+        return root;
+      }
+    }
+    // 如果程式有辦法執行到這邊(while loop整個跑完都沒找到)
+    // 表示此時root == null (root已經跑到leaf node的下面去了，root已經變null)
+    return root;
+  }
+  
+  private TreeNode constructTree() {
+    TreeNode n1 = new TreeNode(10);
+    TreeNode n2 = new TreeNode(5);
+    TreeNode n3 = new TreeNode(15);
+    TreeNode n4 = new TreeNode(8);
+    TreeNode n5 = new TreeNode(14);
+    TreeNode n6 = new TreeNode(16);
+    TreeNode n7 = new TreeNode(6);
+    TreeNode n8 = new TreeNode(9);
+    n1.left = n2;
+    n1.right = n3;
+    n2.right = n4;
+    n3.left = n5;
+    n3.right = n6;
+    n4.left = n7;
+    n4.right = n8;
+    return n1;
+  }
+}
